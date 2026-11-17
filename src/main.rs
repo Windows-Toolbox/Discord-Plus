@@ -593,9 +593,16 @@ fn work(rt: Runtime<Plus>) {
         rt.with(|p, _| p.report = report.clone());
         rt.changed();
     };
+    let mut taken_over = false;
     loop {
         // While the program only serves its page, the worker sleeps here.
         rt.wait_running();
+        // The first time the program really runs: the autostart entry of the Python version now starts this
+        // program. Here and not in `main` – started for its page and then switched on with Start, the process
+        // never passes `main` with its workers on.
+        if !std::mem::replace(&mut taken_over, true) {
+            take_over_autostart();
+        }
         let mut session = Session::new();
         rt.with(|p, _| {
             p.running = true;
@@ -673,17 +680,20 @@ fn carry_over(program_dir: &Path, data: &Path) {
     }
 }
 
+/// The autostart entry of the Python version (`WindowsToolbox DiscordPlus`) is replaced by one for this program –
+/// unless that one was switched off in Windows; then nothing starts, as before.
+fn take_over_autostart() {
+    if let Ok(exe) = std::env::current_exe()
+        && kit::autostart::take_over(OLD_AUTOSTART, Plus::META.id, &exe)
+    {
+        app::log("the autostart entry of the Python version was taken over");
+    }
+}
+
 fn main() {
     kit::texts!();
     app::init(&Plus::META);
     carry_over(&app::program_dir(), &app::data_dir());
-    // A real start (not only to show the page of the stopped program): the autostart entry of the Python version
-    // now starts this program.
-    if !std::env::args().any(|a| a == app::WORKERS_OFF) {
-        if let Ok(exe) = std::env::current_exe() {
-            kit::autostart::take_over(OLD_AUTOSTART, Plus::META.id, &exe);
-        }
-    }
     let plus = Plus { settings: Settings::default(), report: Report::starting(), orders: vec![], running: false };
     app::run(plus, work);
 }

@@ -70,22 +70,26 @@ Written from the Python version in the Toolbox repo (`programs\discord_plus\`: `
 `discord_plus_settings.py`, `discord_plus_gui.py`, `i18n.json`, `README.md`) – every setting, menu entry and special
 case – and checked line by line against this code on 2026-11-17 (Toolbox `DESIGN.md`, section 14).
 
-✔ in this version, covered by a test · ◐ in this version, **not yet tried** with the real Discord app or the
-real Toolbox · ☐ **still missing** · ↻ works differently on purpose (why) · ✘ dropped on purpose (why)
+✔ in this version, covered by a test 
+· ◐ in this version, **not yet tried** with the real Discord app or the real Toolbox 
+· ☐ **still missing** 
+· ↻ works differently on purpose (why) 
+· ✘ dropped on purpose (why)
 
 The Python version was set up on the developer's PC and connected to Discord on 2026-10-13: pipe, handshake,
-AUTHORIZE, the token at discord.com with `http://localhost` and AUTHENTICATE worked there. This version does the
-same steps but has not talked to the real Discord app yet – hence the ◐.
+AUTHORIZE, the token at discord.com with `http://localhost` and AUTHENTICATE worked there. This version was tried
+with the real Discord app and the real Toolbox on 2026-11-18 (“by hand”): with the sign-in taken over from the
+Python version, which was still valid – so Connect and renewing the token have not run for real yet (◐).
 
 **Talking to Discord** (`discord.rs`)
 
-- ◐ find the pipe `discord-ipc-0` … `-9`; handshake `{"v": 1, "client_id": …}`; READY, or Discord's refusal
-  (e.g. 4000 “Invalid Client ID”) as “Discord refuses the client ID: …”
+- ✔ find the pipe `discord-ipc-0` … `-9`; handshake `{"v": 1, "client_id": …}`; READY (by hand ✔), or Discord's
+  refusal (e.g. 4000 “Invalid Client ID”) as “Discord refuses the client ID: …” (◐)
 - ✔ frames: opcode + length + JSON; answer ping with pong; skip events nobody asked for; notice a closed
   connection; a length over 16 MB counts as a broken connection (new)
 - ◐ AUTHORIZE (scopes `rpc`, `identify`) → code → token at discord.com (`redirect_uri` `http://localhost`) →
   AUTHENTICATE; the user's id (to leave them out of the list), display name (else user name) and the app's name
-  are kept in `data\login.json`
+  are kept in `data\login.json` (AUTHENTICATE with a kept token: by hand ✔)
 - ✔ reading discord.com's answers: token, refusal with Discord's reason, a broken answer, an answer without token
 - ◐ the user agent: the Python version sent `windows-toolbox discord_plus (…, 1.0)` because Cloudflare in front of
   discord.com sometimes blocked Python's default one; the kit sends `windows-toolbox`. Shows at the first Connect.
@@ -94,8 +98,9 @@ same steps but has not talked to the real Discord app yet – hence the ◐.
 - ↻ no internet while renewing: the Python version said “Discord is not running” (wrong); this one keeps the
   token and tries it, and when that old token has expired too, it says “discord.com cannot be reached – the
   sign-in is renewed as soon as the internet is back” (✔ test; ◐ with a real cable pulled)
-- ◐ GET_SELECTED_VOICE_CHANNEL every 3 s; GET_GUILD (timeout 5) once per server for its name – no name, no
+- ✔ GET_SELECTED_VOICE_CHANNEL every 3 s; GET_GUILD (timeout 5) once per server for its name – no name, no
   problem; SET_ACTIVITY with the program's pid, only on a change (Discord allows 5 changes in 20 s); none = cleared
+  (by hand: a server voice chat and a private call shown, cleared after leaving)
 - ◐ Discord refuses a command: disconnect, “Discord reports: … (code …)”, 15 s; Discord not running or the
   connection lost: “Discord is not running – waiting for the Discord app”, 15 s – never asking the user
 - ✔ a sign-in made for another client ID is not used; a changed client ID opens a new connection
@@ -157,9 +162,10 @@ same steps but has not talked to the real Discord app yet – hence the ◐.
 
 **Start with Windows**
 
-- ◐ the entry of the Python version (`WindowsToolbox DiscordPlus`) is taken over on the first real start (test ✔
-  in the kit; with the real entry on this PC: not yet)
-- ✔ the switch *Start with Windows* in the Toolbox's frame (Toolbox tests; ◐ by hand)
+- ✔ the entry of the Python version (`WindowsToolbox DiscordPlus`) is taken over the first time the workers run –
+  also when the program was started for its page and then switched on with Start (test in the kit; by hand ✔ –
+  started from its page, which the first version of this port missed)
+- ✔ the switch *Start with Windows* in the Toolbox's frame (Toolbox tests; by hand ✔: one entry in Task Manager)
 - ✔ “switched off in Windows (Task Manager → Startup) – switching on allows it again”; an entry that starts another
   copy says which, and switching on takes it over
 - ✔ removing the program from the Toolbox removes the entry (in the Python version: Remove and `Uninstall.exe`)
@@ -175,11 +181,11 @@ same steps but has not talked to the real Discord app yet – hence the ◐.
 - ✔ the language follows the Toolbox at once, including the standard texts shown in Discord and the tray menu
 - ✔ errors go to `data\log.txt` (↻ Python: the Toolbox's `data\logs\discord_plus.log`): connected as …, token
   refused, connecting failed, every new error once
-- ✔ settings and sign-in of the Python version are carried over once (test ✔; with the real files: ◐ – their token
-  from 2026-10-13 has expired, so the first start also tries the renewal for real)
+- ✔ settings and sign-in of the Python version are carried over once (test ✔; with the real files by hand ✔ – the
+  Python version had renewed its token meanwhile, so it simply went on working)
 - ✔ quitting or stopping clears the activity in Discord (the connection closes)
-- ◐ Windows shows “Discord Plus” with its logo and “Windows Toolbox” as publisher (compiled into the exe; the same
-  `.ico` as the Python version)
+- ✔ Windows shows “Discord Plus” with its logo and “Windows Toolbox” as publisher (compiled into the exe; the same
+  `.ico` as the Python version; by hand ✔ in Task Manager → Startup)
 - ✘ the status field with the activity last sent: nothing read it
 - ✔ the logo's source: `assets\logo_source.png`, next to the `.ico` made from it. ✘ `build_logo.py`: Python
   leaves the project, and the `.ico` is done; a new logo would need a new script anyway.
