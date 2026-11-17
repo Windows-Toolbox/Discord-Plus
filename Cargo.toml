@@ -1,0 +1,30 @@
+[package]
+name = "discord-plus"
+version = "2.0.0"
+edition = "2024"
+publish = false
+description = "Extensions for Discord. Call status: shows “In a call” as soon as you're on a call or in a voice chat – even for friends who can't see the server or call."
+repository = "https://github.com/Windows-Toolbox/Discord-Plus"
+
+# What the Toolbox needs to know; program.json is generated from this by build.rs (Toolbox\DESIGN.md 15.4).
+[package.metadata.toolbox]
+id = "discord_plus"
+exe = "DiscordPlus.exe"
+category = { de = "Allgemein", en = "General" }
+background = true
+name = "Discord Plus"
+description = { de = "Erweiterungen für Discord. Call-Status: zeigt „Im Call“ an, sobald du telefonierst oder in einem Voice-Chat bist – auch für Freunde, die den Server oder Anruf nicht sehen können.", en = "Extensions for Discord. Call status: shows “In a call” as soon as you're on a call or in a voice chat – even for friends who can't see the server or call." }
+
+[dependencies]
+# The shared library of the Windows Toolbox, compiled in. `branch` goes away once the kit is on the main branch.
+kit = { package = "toolbox-kit", git = "https://github.com/Windows-Toolbox/Toolbox", branch = "rust-redesign" }
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.154"
+
+[build-dependencies]
+kit = { package = "toolbox-kit", git = "https://github.com/Windows-Toolbox/Toolbox", branch = "rust-redesign", default-features = false, features = ["build"] }
+
+[profile.release]
+lto = true
+strip = true
+codegen-units = 1

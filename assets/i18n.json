@@ -1,0 +1,362 @@
+{
+  "page.status": {
+    "de": "Status",
+    "en": "Status"
+  },
+  "page.stopped": {
+    "de": "Gestoppt – ohne das Programm zeigt Discord nichts an.",
+    "en": "Stopped – without the program, Discord shows nothing."
+  },
+  "page.heard": {
+    "de": "Discord meldet: {text}",
+    "en": "Discord reports: {text}"
+  },
+  "page.setup": {
+    "de": "Einrichtung (einmalig)",
+    "en": "Setup (one-time)"
+  },
+  "page.setup.text": {
+    "de": "Discord zeigt deinen Status nur an, wenn er von einer eigenen „App“ kommt. Die legst du einmal an (etwa 3 Minuten, kostenlos):\n\n1.  „Developer Portal öffnen“, mit deinem Discord-Konto anmelden, oben rechts „New Application“. Der Name, den du dort eingibst, steht später hinter „Spielt“ – z. B. „Telefonat“ oder „Voice-Chat“. Unter „General Information“ kannst du auch ein Bild hochladen (App Icon).\n2.  Links „OAuth2“: die „Client ID“ kopieren und unten einfügen. Das „Client Secret“ zeigt Discord nur einmal – bis dahin steht dort „Hidden for security“ und Kopieren ist gesperrt. Also „Reset Secret“ klicken (bestätigen, ggf. Code aus der Authenticator-App), dann erscheint es: sofort kopieren und unten einfügen. Es bleibt nur auf diesem PC (data\\settings.json im Ordner des Programms).\n3.  Auf derselben Seite unter „Redirects“ → „Add Redirect“: http://localhost eintragen (Knopf „http://localhost kopieren“) und unten „Save Changes“.\n4.  Das Programm starten und hier „Verbinden“ klicken. Discord fragt in der App einmal, ob deine App auf dein Konto zugreifen darf → „Autorisieren“. Danach fragt es nie wieder von selbst.\n5.  In Discord unter Einstellungen → Aktivitätsprivatsphäre (Activity Privacy) muss „Meine Aktivität teilen“ (Share my activity) an sein – sonst sieht niemand die Anzeige. Freunde sehen sie dann immer; darunter (Where I Share Activity) stellst du ein, auf welchen Servern sie auch andere sehen.\n\nTesten: Ruf jemanden an oder geh in einen Voice-Chat. Oben unter „Status“ steht dann, was Discord meldet.",
+    "en": "Discord only shows your status if it comes from your own “app”. You create it once (about 3 minutes, free):\n\n1.  “Open Developer Portal”, sign in with your Discord account, “New Application” at the top right. The name you enter there will later appear after “Playing” – e.g. “Phone call” or “Voice chat”. Under “General Information” you can also upload a picture (App Icon).\n2.  On the left, “OAuth2”: copy the “Client ID” and paste it below. Discord shows the “Client Secret” only once – until then it says “Hidden for security” and copying is blocked. So click “Reset Secret” (confirm, possibly with a code from your authenticator app), then it appears: copy it right away and paste it below. It stays on this PC only (data\\settings.json in the program's folder).\n3.  On the same page under “Redirects” → “Add Redirect”: enter http://localhost (button “Copy http://localhost”) and click “Save Changes” at the bottom.\n4.  Start the program and click “Connect” here. Discord asks once in the app whether your app may access your account → “Authorize”. After that it never asks again by itself.\n5.  In Discord under Settings → Activity Privacy, “Share my activity” must be on – otherwise nobody sees the status. Friends then always see it; below (Where I Share Activity) you choose on which servers others see it too.\n\nTesting: call someone or join a voice chat. Under “Status” above you'll see what Discord reports."
+  },
+  "page.portal": {
+    "de": "Developer Portal öffnen",
+    "en": "Open Developer Portal"
+  },
+  "page.copy_redirect": {
+    "de": "http://localhost kopieren",
+    "en": "Copy http://localhost"
+  },
+  "page.client_id": {
+    "de": "Client ID",
+    "en": "Client ID"
+  },
+  "page.client_secret": {
+    "de": "Client Secret",
+    "en": "Client Secret"
+  },
+  "page.connect": {
+    "de": "Verbinden",
+    "en": "Connect"
+  },
+  "page.sign_out": {
+    "de": "Abmelden",
+    "en": "Sign out"
+  },
+  "page.connected": {
+    "de": "Verbunden als {user}",
+    "en": "Connected as {user}"
+  },
+  "page.connected_app": {
+    "de": "Verbunden als {user} – App „{app}“",
+    "en": "Connected as {user} – app “{app}”"
+  },
+  "page.not_set_up": {
+    "de": "Noch nicht eingerichtet – Client ID und Client Secret fehlen.",
+    "en": "Not set up yet – Client ID and Client Secret are missing."
+  },
+  "page.not_connected": {
+    "de": "Noch nicht verbunden – „Verbinden“ klicken.",
+    "en": "Not connected yet – click “Connect”."
+  },
+  "page.must_run": {
+    "de": "Zum Verbinden muss das Programm laufen – erst oben „Start“, dann „Verbinden“.",
+    "en": "The program has to be running to connect – first “Start” above, then “Connect”."
+  },
+  "page.call_status": {
+    "de": "Call-Status",
+    "en": "Call status"
+  },
+  "page.call_status.text": {
+    "de": "Zeigt in Discord „Im Call“ an, sobald du telefonierst oder in einem Voice-Chat bist – auch für Freunde, die den Server oder Anruf nicht sehen können.",
+    "en": "Shows “In a call” in Discord as soon as you're on a call or in a voice chat – even for friends who can't see the server or call."
+  },
+  "page.show": {
+    "de": "Anzeigen, wenn ich im Call bin",
+    "en": "Show when I'm in a call"
+  },
+  "page.show_for": {
+    "de": "Anzeigen bei",
+    "en": "Show for"
+  },
+  "page.show_for.both": {
+    "de": "Anrufe und Server",
+    "en": "Calls and servers"
+  },
+  "page.show_for.calls": {
+    "de": "Nur Anrufe",
+    "en": "Calls only"
+  },
+  "page.show_for.servers": {
+    "de": "Nur Server",
+    "en": "Servers only"
+  },
+  "page.text_call": {
+    "de": "Text bei Anrufen (leer: „{standard}“)",
+    "en": "Text for calls (empty: “{standard}”)"
+  },
+  "page.text_server": {
+    "de": "Text auf Servern (leer: „{standard}“)",
+    "en": "Text on servers (empty: “{standard}”)"
+  },
+  "page.names": {
+    "de": "Namen anzeigen („… mit Anna“)",
+    "en": "Show names (“… with Anna”)"
+  },
+  "page.names.warning": {
+    "de": "Das sehen alle deine Freunde – auch die, die die andere Person nicht kennen. Frag im Zweifel vorher.",
+    "en": "All your friends see this – including those who don't know the other person. If in doubt, ask first."
+  },
+  "page.place": {
+    "de": "Server und Kanal bzw. Gruppenname anzeigen",
+    "en": "Show server and channel or group name"
+  },
+  "page.count": {
+    "de": "Personenzahl anzeigen (ab 3 Personen und auf Servern)",
+    "en": "Show number of people (from 3 people and on servers)"
+  },
+  "page.duration": {
+    "de": "Dauer anzeigen",
+    "en": "Show duration"
+  },
+  "page.kind": {
+    "de": "Art",
+    "en": "Type"
+  },
+  "page.beside_name": {
+    "de": "Neben deinem Namen",
+    "en": "Next to your name"
+  },
+  "page.beside_name.app": {
+    "de": "Name der App",
+    "en": "App name"
+  },
+  "page.beside_name.text": {
+    "de": "Text",
+    "en": "Text"
+  },
+  "page.beside_name.info": {
+    "de": "„Neben deinem Namen“ ist, was in der Mitgliederliste und Freundesliste kurz neben deinem Namen steht: der Name der App (z. B. „Spielt Telefonat“) oder deine erste Zeile (z. B. „Im Call“). Im Profil steht immer alles.",
+    "en": "“Next to your name” is what appears briefly next to your name in the member list and friends list: the app's name (e.g. “Playing Phone call”) or your first line (e.g. “In a call”). Your profile always shows everything."
+  },
+  "page.preview": {
+    "de": "Vorschau Call-Status",
+    "en": "Call status preview"
+  },
+  "page.preview.text": {
+    "de": "Ungefähr – wie es genau aussieht, entscheidet Discord.",
+    "en": "Approximate – Discord decides exactly how it looks."
+  },
+  "page.good_to_know": {
+    "de": "Gut zu wissen",
+    "en": "Good to know"
+  },
+  "page.notes": {
+    "de": "•  Funktioniert nur mit der Discord-App auf diesem PC (nicht im Browser) – sie muss laufen.\n•  Die Anzeige sehen alle, die auch sonst sehen, was du spielst: Freunde und Leute auf gemeinsamen Servern.\n•  Läuft gleichzeitig ein Spiel, zeigt Discord beide Aktivitäten; neben deinem Namen steht meist das Spiel.\n•  Die Dauer zählt ab dem Moment, in dem das Programm den Call bemerkt (spätestens nach 3 Sekunden).\n•  Mit „Mit Windows starten“ oben wartet das Programm nach dem Anmelden im Hintergrund, bis Discord läuft.",
+    "en": "•  Only works with the Discord app on this PC (not in the browser) – it has to be running.\n•  Everyone who otherwise sees what you're playing sees it: friends and people on shared servers.\n•  If a game is running at the same time, Discord shows both activities; next to your name it usually shows the game.\n•  The duration counts from the moment the program notices the call (after 3 seconds at the latest).\n•  With “Start with Windows” above, the program waits in the background after sign-in until Discord is running."
+  },
+  "page.advanced": {
+    "de": "Erweitert",
+    "en": "Advanced"
+  },
+  "page.open_log": {
+    "de": "Log öffnen",
+    "en": "Open log"
+  },
+  "page.open_settings": {
+    "de": "Einstellungsdatei öffnen",
+    "en": "Open settings file"
+  },
+  "page.reset": {
+    "de": "Alles zurücksetzen",
+    "en": "Reset everything"
+  },
+
+  "toast.copied": {
+    "de": "{text} kopiert ✓",
+    "en": "Copied {text} ✓"
+  },
+  "toast.credentials_missing": {
+    "de": "Erst Client ID und Client Secret eintragen (Schritt 2)",
+    "en": "Enter the Client ID and Client Secret first (step 2)"
+  },
+  "toast.start_first": {
+    "de": "Erst das Programm starten (oben „Start“), dann „Verbinden“",
+    "en": "Start the program first (“Start” above), then “Connect”"
+  },
+  "toast.reset": {
+    "de": "Zurückgesetzt – Client ID und Client Secret bleiben",
+    "en": "Reset – Client ID and Client Secret are kept"
+  },
+
+  "kind.0": {
+    "de": "Spielt",
+    "en": "Playing"
+  },
+  "kind.2": {
+    "de": "Hört",
+    "en": "Listening to"
+  },
+  "kind.3": {
+    "de": "Schaut",
+    "en": "Watching"
+  },
+  "kind.5": {
+    "de": "Tritt an in",
+    "en": "Competing in"
+  },
+
+  "preview.app": {
+    "de": "‹Name deiner App›",
+    "en": "‹your app's name›"
+  },
+  "preview.call": {
+    "de": "Anruf mit Anna",
+    "en": "Call with Anna"
+  },
+  "preview.server": {
+    "de": "Voice-Chat auf einem Server",
+    "en": "Voice chat on a server"
+  },
+  "preview.channel": {
+    "de": "Allgemein",
+    "en": "General"
+  },
+  "preview.server_name": {
+    "de": "Mein Server",
+    "en": "My server"
+  },
+  "preview.not_shown": {
+    "de": "{title}:  wird nicht angezeigt",
+    "en": "{title}:  not shown"
+  },
+  "preview.elapsed": {
+    "de": "12:34 vergangen",
+    "en": "12:34 elapsed"
+  },
+  "preview.picture": {
+    "de": "(mit Annas Profilbild)",
+    "en": "(with Anna's profile picture)"
+  },
+  "preview.beside": {
+    "de": "neben deinem Namen: {verb} {beside}",
+    "en": "next to your name: {verb} {beside}"
+  },
+
+  "standard.text_call": {
+    "de": "Im Call",
+    "en": "In a call"
+  },
+  "standard.text_server": {
+    "de": "Im Voice-Chat",
+    "en": "In a voice chat"
+  },
+
+  "shown.with": {
+    "de": "{text} mit {names}",
+    "en": "{text} with {names}"
+  },
+  "shown.and": {
+    "de": "{first} und {last}",
+    "en": "{first} and {last}"
+  },
+  "shown.more": {
+    "de": "{names} und {n} weitere",
+    "en": "{names} and {n} more"
+  },
+  "shown.alone": {
+    "de": "allein",
+    "en": "alone"
+  },
+  "shown.people": {
+    "de": "{n} Personen",
+    "en": "{n} people"
+  },
+
+  "channel.none": {
+    "de": "in keinem Anruf oder Voice-Chat",
+    "en": "not in a call or voice chat"
+  },
+  "channel.nobody": {
+    "de": "niemand sonst",
+    "en": "nobody else"
+  },
+  "channel.server": {
+    "de": "Voice-Chat {place} – mit {names}",
+    "en": "Voice chat {place} – with {names}"
+  },
+  "channel.call": {
+    "de": "Privater Anruf mit {names}",
+    "en": "Private call with {names}"
+  },
+  "channel.group": {
+    "de": "Gruppenanruf mit {names}",
+    "en": "Group call with {names}"
+  },
+
+  "message.starting": {
+    "de": "Startet …",
+    "en": "Starting …"
+  },
+  "message.credentials_missing": {
+    "de": "Client ID und Client Secret fehlen (Seite des Programms, Einrichtung)",
+    "en": "Client ID and Client Secret are missing (the program's page, setup)"
+  },
+  "message.start_discord": {
+    "de": "Discord läuft nicht – erst die Discord-App starten",
+    "en": "Discord isn't running – start the Discord app first"
+  },
+  "message.client_id_refused": {
+    "de": "Discord lehnt die Client ID ab: {error}",
+    "en": "Discord rejects the Client ID: {error}"
+  },
+  "message.authorize": {
+    "de": "Bitte in Discord „Autorisieren“ klicken …",
+    "en": "Please click “Authorize” in Discord …"
+  },
+  "message.setup": {
+    "de": "Einrichtung fehlt – Anleitung auf der Seite des Programms",
+    "en": "Setup missing – instructions on the program's page"
+  },
+  "message.connect_failed": {
+    "de": "Verbinden fehlgeschlagen: {error}",
+    "en": "Connecting failed: {error}"
+  },
+  "message.not_connected": {
+    "de": "Nicht verbunden – auf der Seite des Programms „Verbinden“ klicken",
+    "en": "Not connected – click “Connect” on the program's page"
+  },
+  "message.discord_error": {
+    "de": "Discord meldet: {error} (Code {code})",
+    "en": "Discord reports: {error} (code {code})"
+  },
+  "message.offline": {
+    "de": "discord.com nicht erreichbar – die Anmeldung wird erneuert, sobald das Internet wieder da ist",
+    "en": "discord.com cannot be reached – the sign-in is renewed as soon as the internet is back"
+  },
+  "message.discord_missing": {
+    "de": "Discord läuft nicht – wartet auf die Discord-App",
+    "en": "Discord isn't running – waiting for the Discord app"
+  },
+  "message.paused": {
+    "de": "Pausiert – zeigt in Discord nichts an",
+    "en": "Paused – shows nothing in Discord"
+  },
+  "message.showing": {
+    "de": "Zeigt an: {text}",
+    "en": "Showing: {text}"
+  },
+  "message.not_shown": {
+    "de": "Im Call – laut Einstellung nicht angezeigt",
+    "en": "In a call – not shown due to settings"
+  },
+  "message.no_call": {
+    "de": "Verbunden – du bist in keinem Call",
+    "en": "Connected – you're not in a call"
+  },
+
+  "menu.call_status": {
+    "de": "Call-Status anzeigen",
+    "en": "Show call status"
+  }
+}
