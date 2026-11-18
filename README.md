@@ -56,7 +56,7 @@ kit is used instead.
 
 | File | What it holds |
 |---|---|
-| `src\main.rs` | settings, the page, the worker that keeps the connection to Discord, taking over the Python version's files |
+| `src\main.rs` | settings, the page, the worker that keeps the connection to Discord |
 | `src\discord.rs` | the Discord app's local interface (named pipe) and the login at discord.com |
 | `src\activity.rs` | what is shown in Discord, from the voice channel and the settings – also the preview |
 | `assets\i18n.json` | every text, German and English |
@@ -66,7 +66,7 @@ a step of the same worker (one connection to Discord, used by one thread).
 
 ## What the Python version could do – the port's checklist
 
-Written from the Python version in the Toolbox repo (`programs\discord_plus\`: `discord_plus.py`, `discord_ipc.py`,
+Written from the Python version (in the Toolbox repo's git history, `programs\discord_plus\`: `discord_plus.py`, `discord_ipc.py`,
 `discord_plus_settings.py`, `discord_plus_gui.py`, `i18n.json`, `README.md`) – every setting, menu entry and special
 case – and checked line by line against this code on 2026-11-17 (Toolbox `DESIGN.md`, section 14).
 
@@ -122,8 +122,7 @@ Python version, which was still valid – so Connect and renewing the token have
 - show for calls and servers / only calls / only servers
 - own text for calls and for servers; shorter than 2 characters → the standard text
 - ↻ an empty text field means the standard text of the current language, and the field's label names it. The
-  Python version wrote the standard text into the field and recognised it in every language; the carry-over
-  turns such an old standard text into an empty field, so it keeps following the language.
+  Python version wrote the standard text into the field and recognised it in every language.
 - names (“… with Anna, Tom and Lea”, “and 1 more” from the fourth on); the profile picture (with the name as its
   tooltip) only in a call with exactly one other person
 - place: “server · channel” on servers, the group's name in group calls, nothing in a private call
@@ -162,9 +161,6 @@ Python version, which was still valid – so Connect and renewing the token have
 
 **Start with Windows**
 
-- ✔ the entry of the Python version (`WindowsToolbox DiscordPlus`) is taken over the first time the workers run –
-  also when the program was started for its page and then switched on with Start (test in the kit; by hand ✔ –
-  started from its page, which the first version of this port missed)
 - ✔ the switch *Start with Windows* in the Toolbox's frame (Toolbox tests; by hand ✔: one entry in Task Manager)
 - ✔ “switched off in Windows (Task Manager → Startup) – switching on allows it again”; an entry that starts another
   copy says which, and switching on takes it over
@@ -173,16 +169,12 @@ Python version, which was still valid – so Connect and renewing the token have
 **Around it**
 
 - ✔ single instance; a second start switches the first one on
-- ✔ the Python version still running at the switch (“which one to keep” → this one): the Toolbox asks it to quit on
-  its port and then starts this one, so Discord never shows the activity twice (Toolbox test; ◐ by hand)
 - ✔ tray: the status as tooltip (at most 127 characters) and first line, “Show call status” with a check mark,
   Settings (a click on the icon; Python: a double click), Quit – under the Toolbox's icon, or an icon of its own
   without the Toolbox
 - ✔ the language follows the Toolbox at once, including the standard texts shown in Discord and the tray menu
 - ✔ errors go to `data\log.txt` (↻ Python: the Toolbox's `data\logs\discord_plus.log`): connected as …, token
   refused, connecting failed, every new error once
-- ✔ settings and sign-in of the Python version are carried over once (test ✔; with the real files by hand ✔ – the
-  Python version had renewed its token meanwhile, so it simply went on working)
 - ✔ quitting or stopping clears the activity in Discord (the connection closes)
 - ✔ Windows shows “Discord Plus” with its logo and “Windows Toolbox” as publisher (compiled into the exe; the same
   `.ico` as the Python version; by hand ✔ in Task Manager → Startup)

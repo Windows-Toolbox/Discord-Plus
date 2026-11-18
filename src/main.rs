@@ -24,7 +24,7 @@ mod activity;
 mod discord;
 
 use std::collections::BTreeMap;
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
 use kit::app::{self, Program, Runtime};
@@ -42,8 +42,6 @@ const POLL: Duration = Duration::from_secs(3);
 /// Until the next try when Discord does not run or something is missing.
 const WAIT: Duration = Duration::from_secs(15);
 const PORTAL: &str = "https://discord.com/developers/applications";
-/// The autostart entry of the Python version; taken over on the first start (kit::autostart).
-const OLD_AUTOSTART: &str = "WindowsToolbox DiscordPlus";
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Default)]
 #[serde(rename_all = "snake_case")]
@@ -593,16 +591,9 @@ fn work(rt: Runtime<Plus>) {
         rt.with(|p, _| p.report = report.clone());
         rt.changed();
     };
-    let mut taken_over = false;
     loop {
         // While the program only serves its page, the worker sleeps here.
         rt.wait_running();
-        // The first time the program really runs: the autostart entry of the Python version now starts this
-        // program. Here and not in `main` – started for its page and then switched on with Start, the process
-        // never passes `main` with its workers on.
-        if !std::mem::replace(&mut taken_over, true) {
-            take_over_autostart();
-        }
         let mut session = Session::new();
         rt.with(|p, _| {
             p.running = true;
@@ -632,68 +623,9 @@ fn work(rt: Runtime<Plus>) {
     }
 }
 
-// ---------- from the Python version ----------
-
-/// The settings of the Python version (`data\discord_plus.json` of the classic Toolbox) in today's names.
-fn translate_settings(old: &Value) -> Value {
-    // A text that is just the old standard text – in whichever language – becomes "the standard text".
-    const STANDARD: [&str; 4] = ["Im Call", "In a call", "Im Voice-Chat", "In a voice chat"];
-    let text = |key: &str| old[key].as_str().map(str::trim).filter(|t| !STANDARD.contains(t)).unwrap_or_default().to_string();
-    let show_for = match old["anzeigen_bei"].as_str() {
-        Some("privat") => "calls",
-        Some("server") => "servers",
-        _ => "both",
-    };
-    let mut new = serde_json::json!({"show_for": show_for, "text_call": text("text_privat"), "text_server": text("text_server")});
-    for (old_key, new_key) in [("client_id", "client_id"), ("client_secret", "client_secret"), ("call_status", "call_status"), ("namen", "names"), ("ort", "place"), ("anzahl", "count"), ("dauer", "duration"), ("art", "kind"), ("neben_namen", "beside_name")] {
-        if !old[old_key].is_null() {
-            new[new_key] = old[old_key].clone();
-        }
-    }
-    new
-}
-
-/// The sign-in of the Python version (`data\discord_plus_anmeldung.json`).
-fn translate_login(old: &Value) -> Login {
-    let text = |key: &str| old[key].as_str().unwrap_or_default().to_string();
-    Login { client_id: text("client_id"), access_token: text("access_token"), refresh_token: text("refresh_token"), expires: old["ablauf"].as_f64().unwrap_or(0.0) as u64, user: text("nutzer"), app: text("app") }
-}
-
-/// On the very first start (no `data\settings.json` yet): settings and sign-in of the Python version are carried
-/// over once, if a classic Toolbox lies in one of the folders above (Toolbox\DESIGN.md 11).
-fn carry_over(program_dir: &Path, data: &Path) {
-    if data.join("settings.json").exists() {
-        return;
-    }
-    let read = |file: PathBuf| -> Option<Value> { serde_json::from_str(std::fs::read_to_string(file).ok()?.trim_start_matches('\u{feff}')).ok() };
-    for above in program_dir.ancestors().skip(1).take(4) {
-        for old_data in [above.join("data"), above.join("Toolbox").join("data")] {
-            let Some(old) = read(old_data.join("discord_plus.json")) else { continue };
-            let _ = std::fs::create_dir_all(data);
-            let _ = std::fs::write(data.join("settings.json"), serde_json::to_string_pretty(&translate_settings(&old)).unwrap_or_default());
-            if let Some(login) = read(old_data.join("discord_plus_anmeldung.json")) {
-                let _ = std::fs::write(data.join("login.json"), serde_json::to_string_pretty(&translate_login(&login)).unwrap_or_default());
-            }
-            app::log(&format!("settings carried over from {}", old_data.display()));
-            return;
-        }
-    }
-}
-
-/// The autostart entry of the Python version (`WindowsToolbox DiscordPlus`) is replaced by one for this program –
-/// unless that one was switched off in Windows; then nothing starts, as before.
-fn take_over_autostart() {
-    if let Ok(exe) = std::env::current_exe()
-        && kit::autostart::take_over(OLD_AUTOSTART, Plus::META.id, &exe)
-    {
-        app::log("the autostart entry of the Python version was taken over");
-    }
-}
-
 fn main() {
     kit::texts!();
     app::init(&Plus::META);
-    carry_over(&app::program_dir(), &app::data_dir());
     let plus = Plus { settings: Settings::default(), report: Report::starting(), orders: vec![], running: false };
     app::run(plus, work);
 }
@@ -701,7 +633,6 @@ fn main() {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use serde_json::json;
 
     fn plus(running: bool) -> Plus {
         kit::texts!();
@@ -805,38 +736,6 @@ mod tests {
         // Reset keeps the credentials.
         assert!(p.action("reset", &mut s).is_some());
         assert_eq!(s, Settings { client_id: "1".into(), client_secret: "x".into(), ..Default::default() });
-    }
-
-    #[test]
-    fn the_python_version_s_files() {
-        let old = json!({"client_id": " 123 ", "client_secret": "s", "call_status": false, "anzeigen_bei": "privat", "text_privat": "Im Call", "text_server": "Zocken",
-            "namen": true, "ort": true, "anzahl": false, "dauer": false, "art": 3, "neben_namen": 0});
-        let new: Settings = serde_json::from_value(translate_settings(&old)).unwrap();
-        assert_eq!(
-            new,
-            Settings { client_id: " 123 ".into(), client_secret: "s".into(), call_status: false, show_for: ShowFor::Calls, text_call: String::new(), text_server: "Zocken".into(), names: true, place: true, count: false, duration: false, kind: 3, beside_name: 0 }
-        );
-        // What the old file lacks keeps its default.
-        assert_eq!(serde_json::from_value::<Settings>(translate_settings(&json!({}))).unwrap(), Settings::default());
-        let login = translate_login(&json!({"client_id": "123", "access_token": "a", "refresh_token": "r", "ablauf": 1790000000.5, "nutzer": "Max", "app": "Phone call"}));
-        assert_eq!(login, Login { client_id: "123".into(), access_token: "a".into(), refresh_token: "r".into(), expires: 1790000000, user: "Max".into(), app: "Phone call".into() });
-
-        // The files are found in a classic Toolbox above the program's folder – once.
-        let root = std::env::temp_dir().join(format!("discord-plus-carry-{}", std::process::id()));
-        let _ = std::fs::remove_dir_all(&root);
-        let (program, data) = (root.join("Discord Plus").join("dist"), root.join("Discord Plus").join("dist").join("data"));
-        std::fs::create_dir_all(root.join("Toolbox").join("data")).unwrap();
-        std::fs::create_dir_all(&program).unwrap();
-        std::fs::write(root.join("Toolbox/data/discord_plus.json"), old.to_string()).unwrap();
-        std::fs::write(root.join("Toolbox/data/discord_plus_anmeldung.json"), r#"{"client_id":"123","access_token":"a","nutzer":"Max"}"#).unwrap();
-        carry_over(&program, &data);
-        let carried: Settings = serde_json::from_str(&std::fs::read_to_string(data.join("settings.json")).unwrap()).unwrap();
-        assert_eq!((carried.kind, carried.show_for), (3, ShowFor::Calls));
-        assert!(std::fs::read_to_string(data.join("login.json")).unwrap().contains("\"user\": \"Max\""));
-        std::fs::write(data.join("settings.json"), "{}").unwrap();
-        carry_over(&program, &data);
-        assert_eq!(std::fs::read_to_string(data.join("settings.json")).unwrap(), "{}", "never a second time");
-        std::fs::remove_dir_all(&root).ok();
     }
 
     /// The worker's steps that need no Discord: without credentials nothing is tried; a sign-in for another client
