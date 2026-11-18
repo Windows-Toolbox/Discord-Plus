@@ -2,6 +2,7 @@
 name = "discord-plus"
 version = "2.0.0"
 edition = "2024"
+license = "MIT"
 publish = false
 description = "Extensions for Discord. Call status: shows “In a call” as soon as you're on a call or in a voice chat – even for friends who can't see the server or call."
 repository = "https://github.com/Windows-Toolbox/Discord-Plus"
